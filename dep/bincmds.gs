@@ -9,6 +9,8 @@ command.cd=function(cmd);error_catch=[];head=" "+cmd[0];temp={"file":0}
     return {"status":1, "data":nav.get()}
   end if
 
+  if cmd[1] == "." then return {"status":1, "data":nav.get()}
+
   if cmd[1][0] == "/" then cmd[1]=cmd[1][1:]
   if cmd[1][-1] == "/" then cmd[1]=cmd[1][:-1]
   queue=cmd[1].split("/")
@@ -33,7 +35,7 @@ end function
 
 command.ls=function(cmd);error_catch=[];head=" "+cmd[0];temp={"file":0}
   init=function()
-    if status.is_active then entry_file=device.current.mainf else entry_file=hc.File("/")
+    if status.is_active then entry_file=objects.borrow("file") else entry_file=hc.File("/")
     if not cmd.hasIndex(1) then ;cmd.push(nav.get());temp.file=objects.nf(entry_file, cmd[1]);end if
     temp.file=get_file(cmd[1], entry_file, 1)
     if not temp.file then ;error_catch.push(parse_error(cmd[1], head+": directory '", 1));return false;end if
@@ -171,7 +173,7 @@ command.ifconfig=function(cmd);error_catch=[];head=" "+cmd[0];temp={"comp":0}
   output=output+c10+b+c("b")+"local ip: "+c("p")+lip
   output=output+c10+b+c("b")+"gateway: "+c("p")+gw
 
-  print screen.add(output+c10+c0)
+  print output+c10+c0
 
 
   return {"status":1, "data":[pip, lip, gw]}

@@ -2,16 +2,35 @@ command.connect=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
   init=function()
     if cmd.len < 2 then ;usage({"usage":[" connect lanIP OPT: user"], "short":[" --c"], "note":[" -must run after collecting objects with [recon]", " -if no username is specified, then the best user is used"]});return false;end if
     if ip=={"pub":"", "lan":"", "lanList":[]} then ;error_catch.push(head+": must run after obtaining objects with [recon]...");return false;end if;
-    if not is_lan_ip(cmd[1]) then ;error_catch.push(head+": invalid lan IP...");return false;end if
-    if not device.tree.hasIndex(cmd[1]) then ;error_catch.push(head+": '"+cmd[1]+"' not found in device tree...");return false;end if
-    if not cmd.hasIndex(2) then cmd.push("root")
     res=0
-    for i in device.user_list[cmd[1]]
+    found = []
+    for local in device.tree.indexes
+      if tp(local.indexOf(cmd[1])) != "number" then continue
+      found.push(local)
+    end for
+
+    if not found.len then
+      error_catch.push(head+": local ip not found in device tree...")
+      return false
+    end if
+
+    if found.len > 1 then
+      printb(found.join(" ").c("purple")+c0)
+      return false
+    end if
+
+    if not cmd.hasIndex(2) and device.user_list[found[0]].len > 0 then cmd.push(device.user_list[found[0]][0])
+
+
+    for i in device.user_list[found[0]]
       if i.lower.search(cmd[2].lower) then ;res=i;break; end if
     end for
-    if not res then ;error_catch.push(head+": '"+cmd[2]+"@"+cmd[1]+"' not found in user tree...");return false;end if
-    if (user.current.name==res and cmd[1]==ip.lan) then ;error_catch.push(head+": already connected to '"+user.current.name+"@"+ip.lan+"'...");return false;end if
+
+    if not res then ;error_catch.push(head+": '"+cmd[2]+"@"+found[0]+"' not found in user tree...");return false;end if
+    if (user.current.name==res and found[0]==ip.lan) then ;error_catch.push(head+": already connected to '"+user.current.name+"@"+ip.lan+"'...");return false;end if
     cmd[2]=res
+    if ip.lan != found[0] then nav.remoteDir="/"
+    ip.lan = found[0]
 
     flag=get_flags(["-quiet", "-q"], cmd[1:].join(" "), 1)
     if flag.has(["-quiet", "-q"]) then temp.q=1
@@ -20,11 +39,10 @@ command.connect=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
   end function
   if not init() then return {"status":0, "data":error_catch}
 
-  if ip.lan != cmd[1] then nav.remoteDir="/"
-  ip.lan=cmd[1];name=cmd[2]
+  name = cmd[2]
   device.current=device.tree[ip.lan]
-  user.current=user.tree[ip.lan][name]
-  status.is_active=true
+  user.current = user.tree[ip.lan][name]
+  status.is_active = true
 
   if not temp.q then ;print notify(("'"+hide_ip(ip.pub)+"'").color("black black white")+" @ "+("'"+hide_ip(ip.lan)+"'").color("black black white"), "connected")+c0;add_line;end if
 end function
@@ -50,44 +68,11 @@ command.wipe=function(cmd)
 end function
 command["--w"]=@command.wipe
 
-
-command.reconT = function(cmd);error_catch = [];head = " " + cmd[0]
-    config = {"rhost": 0, "port": [], "lan": 0, "scan": 0, "net": 0, "third": misc.CPT, "change": 0}
-    init = function()
-        if cmd.len < 2 then 
-            usage({"usage":["recon public_ip OPT: [port|p]=80,22,0 | [lan|l]=local_ip | [-db | [-scan|-s]]"]})
-            return false
-        end if
-
-        confi
-
-        flags = get_flags(["port=", "p=", "lan=", "l="], cmd[1:].join(" "), 1)
-       
-        if flags.has(["port=", "p="]) then 
-            results = cmd[1:].join(" ").split(get_flags(["port=", "p="], cmd[1:].join(" "))[0])[1]
-            candidates = results.split(",") 
-            for candidate in candidates
-                if typeof(candidate.to_int) != "number" then continue
-                config.ports.push(candidate.to_int)
-            end for
-        end if
-
-        if flags.has(["lan=", "l="]) then 
-            config.lan = cmd[1:].join(" ").split(get_flags(["lan=", "l="], cmd[1:].join(" "))[0])[1].split(" ")[0]
-            if not is_lan_ip(config.lan) then 
-                error_catch.push(head+": invalid local ip [" + config.lan + "] ...")
-                return false
-            end if
-        end if
-    end function
-    if not init() then return {"status": 0, "data": error_catch}
-end function
-
 command.recon=function(cmd);error_catch=[];head=" "+cmd[0];config={"rhost":0, "port":0, "lan":0, "scan":0, "net":0, "third":misc.CPT, "change":0};temp={"q":0}
   init=function()
     //USAGE: recon rhost=pubIP port=80,22,21,0 [OPT: lan=lanIP]
     if cmd.len < 2 then ;usage({"usage":["recon rhost=pubIP OPT: port=80,22,0 | lan=lanIP | -db"]});return false;end if
-    flag=get_flags(["-quiet", "-q", "rhost=", "rh=", "port=", "p=", "lan=", "l="], cmd[1:].join(" "), 1)
+    flag=get_flags(["-quiet", "-q", "rhost=", "rh=", "port=", "p=", "lan=", "l=", "-fw"], cmd[1:].join(" "), 1)
 
     if flag.has(["rhost=", "rh="]) then
       config.rhost=cmd[1:].join(" ").split(get_flags(["rhost=", "rh="], cmd[1:].join(" "))[0])[1].split(" ")[0]
@@ -115,6 +100,9 @@ command.recon=function(cmd);error_catch=[];head=" "+cmd[0];config={"rhost":0, "p
       if not is_lan_ip(config.lan) then ;error_catch.push(head+": invalid lanIP...");return false;end if
     end if
     if flag.has(["-quiet", "-q"]) then temp.q=1
+    if flag.has(["-fw"]) then 
+      config.change = true;
+    end if
 
     return true
   end function
@@ -135,7 +123,7 @@ command.recon=function(cmd);error_catch=[];head=" "+cmd[0];config={"rhost":0, "p
   end function
   handle["-s"]=function();config.scan=1;return true;end function;handle["-scan"]=@handle["-s"]
   handle["-c"]=function();config.change=1;return true;end function
-  changes=get_flags(["-s", "-scan", "-r", "-c", "l=", "lan="], cmd[1:].join(" "), 1)
+  changes=get_flags(["-s", "-scan", "-r", "-c"], cmd[1:].join(" "), 1)
   for flag in changes
     if flag.search("l=") or flag.search("lan=") then ;config.third=flag.split("=")[1];continue;end if
     proxy=@handle[flag]
@@ -146,6 +134,13 @@ command.recon=function(cmd);error_catch=[];head=" "+cmd[0];config={"rhost":0, "p
   if tp(config.port) == "string" then;temp=grab_ports(config.rhost, config.port.split(","));if temp == [] then;error_catch.push(c("r")+head+": ports '"+config.port+"' not found...");return error_catch;end if;config.port=temp;end if
   if not config.port then config.port=grab_ports(config.rhost, [], 1)
   if tp(config.net) != "NetSession" then
+    if not mx or tp(mx) == "null" then 
+      printb("  Metaxsploit has not been loaded in properly".c("black"))
+      printb("  Please try restarting".c("black")+" [blbx]".c("black black purple")+"")
+      
+      return {"status":0, "data":error_catch}
+    end if
+    
     for i in config.port
       if i.is_closed then continue
       config.net=mx.net_use(config.rhost, i.port_number)//;print config
@@ -156,7 +151,7 @@ command.recon=function(cmd);error_catch=[];head=" "+cmd[0];config={"rhost":0, "p
     end for
   end if
   collect
-  device.display_tree(1, 1)
+  device.display(1, 1)
 end function
 command["--r"]=@command.recon
 
@@ -257,10 +252,10 @@ command.show = function(cmd)
   end function
   if ip.lan == "127.0.0.1" then print(c("b")+b+"current: "+c("p")+"blbx"+"@"+ip.lan) else print(c("b")+b+"current: "+c("p")+user.current.name+"@"+ip.lan)
   if not user.current.hasIndex("pub") then
-    ;network_piece="network: local".color("black")
-  ;else
-    ;network_piece="network: ".color("black")+user.current.pub.color("purple")
-  ;end if
+    network_piece="network: local".color("black")
+  else
+    network_piece="network: ".color("black")+user.current.pub.color("purple")
+  end if
   printb(network_piece)
 
   device.display_tree(1, 1)
@@ -470,7 +465,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
   vd=device.get_vuln_dir()
   if tp(vd) != "file" then;error_catch.push(head+": no vulnerable directories found...");return {"status":0, "data":error_catch};end if
   printb("success: ".c("black black white") + vd.path.c("purple"))
-  
+
   handle={"return_package":{"status":0, "data":error_catch}}
   handle.escalate=function(cmd);h=" trojan -e"
     ;name=0;//passwd=cmd[3]
@@ -484,7 +479,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
     if cmd.hasIndex(3) then store=trojan.build("blbx_trojan_e.src", trojan.escalate, [shell, comp, file], name+" "+cmd[3]) else store=trojan.build("blbx_trojan_e.src", trojan.escalate, [shell, comp, file], name)
     if not store.status then ;return store;end if
     obj=get_custom_object()
-    if tp(obj.callback) == "shell" then ;print objects.add(obj.callback, ip.lan);print collect;print notify("obtained shell from user '"+name+"'");else;error_catch.push(h+": incorrect password...");return {"status":0, "data":error_catch};end if
+    if tp(obj.callback) == "shell" then ;objects.add(obj.callback, ip.lan);collect;print notify("obtained shell from user '"+name+"'");else;error_catch.push(h+": incorrect password...");return {"status":0, "data":error_catch};end if
     if temp.q then store=command.safe_run("--c", ["--c", ip.lan, name, "-q"]) else store=command.safe_run("--c", ["--c", ip.lan, name])
     if tp(store) == "map" and not store.status then ;error_catch=store.data;return {"status":0, "data":error_catch};end if
     return {"status":1, "data":obj.callback}
@@ -516,7 +511,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
     if not cmd.hasIndex(2) then ;usage({"usage":[" trojan -bounce lanIP libName"]});return handle.return_package; end if
     if not cmd.hasIndex(3) then cmd.push("init")
     lib_found=0
-    for i in ["init.so", "net.so", "aptclient.so", "kernel_module.so", "kernel_router.so", "crypto.so", "metaxploit.so"]
+    for i in ["init.so", "net.so", "aptclient.so", "kernel_module.so", "kernel_router.so", "crypto.so", "metaxploit.so", "libhttp.so", "libsmtp.so", "libssh.so", "libftp.so", "librepository.so"]
       if typeof(i.lower.indexOf(cmd[3])) == "number" then 
         lib_found = i
         break
@@ -579,6 +574,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
     if cmd[1:].join(" ").search("-s") or cmd[1:].join(" ").search("-scan") then poly.get.data.scan=1
 
     store=trojan.build("blbx_trojan_b.src", trojan.bounce, [shell, comp, file])
+    print store
     if not store.status then ;return store;end if
 
     if delete_mx then fmx.delete
@@ -596,6 +592,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
     if not temp.q then
       print notify(("'".color("white")+ip.lan.color("black")+"'".color("white"))+" --> "+("'".color("white")+obj.data.lan.color("black")+"'".color("white")))+c0
       print notify("bounce exploit collected "+("'"+combine.len+"'").color("black black white")+" objects", reveal("?", (not combine.len), "!"))+c0
+      command.safe_run("show", ["show"])
     end if
   end function
   handle["-b"]=@handle.bounce
@@ -1235,7 +1232,7 @@ command["apt-get"]=function(cmd);error_catch=[];head=" "+cmd[0];temp={"op_type":
       usage({"usage":[" apt -i program_name", "apt -sc program_name", "apt -sh repo_address", "apt -ar repo_address port", "apt -dr repo_address", "apt -upd", "apt -upg directory"], "long":[" -install, -search, -show, -addrepo, -delrepo, -update, -upgrade"]})
       return false
     end if
-    if not status.is_active then ;error_catch.push(head+": must [connect] to a target to use this command...");return false;end if
+    //if not status.is_active then ;error_catch.push(head+": must [connect] to a target to use this command...");return false;end if
     options=["-install", "-i", "-search", "-sc", "-show", "-sh", "-addrepo", "-ar", "-delrepo", "-dr", "-update", "-upd", "-upgrade", "-upg"]
     type=get_flags(options, cmd[1:].join(" "))
     if not type then ;error_catch.push(head+": invalid flag...");return false;end if
@@ -1611,19 +1608,5 @@ command.stored=function(cmd)
 end function
 command["--st"]=@command.stored
 
-command.test=function(cmd)
-  if not cmd.hasIndex(1) then cmd.push("Hello World")
-  print cmd[1].enc
-end function
-
-command.test1=function(cmd)
-  print "hello world".dec
-end function
-
-command.mod=function(cmd)
-  num1=cmd[1].to_int;num2=cmd[2].to_int
-  printb(str(num1%num2).color("purple"))
-  add_line
-end function
 
 //customcmds.so

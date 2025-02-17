@@ -6,7 +6,7 @@ monitor.touch_entries_input=[]
 monitor.touch_entries_inverse=[]
 
 trojan={}
-trojan.bounce="c0=char(0);c10=char(10);c33=char(33);tp=@typeof;cs=@clear_screen;ui=@user_input;gs=get_shell;hc=gs.host_computer"+";b="+"<b>".quote+";u="+"<u>".quote+";b2="+"</b>".quote+";u2="+"</u>".quote+""+";color={"+"map".quote+":{"+"b".quote+":"+"#707070".quote+", "+"p".quote+":"+"#7A53F6".quote+", "+"w".quote+":"+"#BEB9E7FF".quote+", "+"r".quote+":"+"red".quote+"}}"+";obj=get_custom_object"+";toolbox=obj.data"+";add_line=function();print+c0;end function"+";c=function(str)"+";  if tp(color.map.indexes.indexOf(str)) == "+"number".quote+" then return "+"<color=".quote+"+color.map[str]+"+">".quote+""+";  if tp(str.indexOf("+"<color=".quote+")) == "+"number".quote+" then return str"+";  return "+"<color=".quote+"+str+"+">".quote+""+";end function"+";string.color=function(string_split_by_space="+"black black black".quote+");list=string_split_by_space.split("+" ".quote+")"+";  if not string_split_by_space.len then string_split_by_space="+"black black black".quote+""+";  colorm={"+"black".quote+":"+"<#707070>".quote+", "+"white".quote+":"+"<#BEB9E7FF>".quote+", "+"purple".quote+":"+"<#7A53F6>".quote+", "+"pink".quote+":"+"<#ED2EEA>".quote+", "+"red".quote+":"+"<color=red>".quote+", "+"dark_red".quote+":"+"<#731313>".quote+", "+"blue".quote+":"+"<color=blue>".quote+", "+"green".quote+":"+"<#2BB930>".quote+", "+"dark_green".quote+":"+"<#2C6407>".quote+", "+"cyan".quote+":"+"<#32E3EF>".quote+", "+"yellow".quote+":"+"<#D2DE0F>".quote+", "+"brown".quote+":"+"<#674D06>".quote+", "+"orange".quote+":"+"<#EA9512>".quote+"}"+";  alpha="+"qwertyuiopasdfghjklzxcvbnm".quote+";number="+"1234567890".quote+";symbol="+"!@#$%^&*()_+-={}|[]\:;'<>?,./".quote+"+"+"".quote+""+"".quote+""+";  check_all=function();res=1;for i in list;if not colorm.hasIndex(i) then ;res=0;break;end if;end for;return res;end function"+";  if not check_all() then return false"+";  while list.len < 3;list.push(list[-1]);end while"+";  coa=colorm[list[0]];con=colorm[list[1]];cos=colorm[list[2]];curr_color=coa;curr_type="+"alpha".quote+";newl=[];fp=1"+";  for char in self.values"+";    is_a=(tp(alpha.indexOf(char.lower)) == "+"number".quote+");is_n=(tp(number.indexOf(char)) == "+"number".quote+");is_s=(tp(symbol.indexOf(char)) == "+"number".quote+")"+";    if char==c10 then ;newl.push(char+curr_color);continue;end if"+";    if is_a then curr_type="+"alpha".quote+";if is_n then curr_type="+"number".quote+";if is_s then curr_type="+"symbol".quote+""+";    if curr_type=="+"alpha".quote+" then"+";      if curr_color!=coa or (curr_color==coa and fp) then curr_color=coa else curr_color="+"".quote+";fp=0"+";      newl.push(curr_color+char);curr_color=coa;continue"+";    end if"+";    if curr_type=="+"number".quote+" then"+";      if curr_color!=con or (curr_color==con and fp) then curr_color=con else curr_color="+"".quote+";fp=0"+";      newl.push(curr_color+char);curr_color=con;continue"+";    end if"+";    if curr_type=="+"symbol".quote+" then"+";      if curr_color!=cos or (curr_color==cos and fp) then curr_color=cos else curr_color="+"".quote+";fp=0"+";      newl.push(curr_color+char);curr_color=cos;continue"+";    end if"+";    newl.push(char)"+";  end for"+";  self=newl.join("+"".quote+");ctr=0"+";  for i in self"+";    if i == "+"<".quote+" then ctr=ctr+1"+";  end for"+";  for i in range(1,ctr)"+";    self=self+"+"</color>".quote+""+";  end for"+";  return self"+";end function"+";"+";reveal=function(str, onCondition=0, elseShow="+"".quote+");if onCondition then return str;return elseShow;end function"+";st="+"<s>".quote+";est="+"</s>".quote+""+";wisp=c("+"p".quote+")+"+"•".quote+"+c("+"w".quote+")+st+"+" ".quote+"+est+c("+"p".quote+")+"+"•".quote+""+";box=function(str, opt=0, opt2=0);return c("+"b".quote+")+b+"+"[".quote+"+reveal(u, (not opt), "+" ".quote+")+c("+"p".quote+")+str+c("+"b".quote+")+reveal(u2, (not opt), "+" ".quote+")+"+"]".quote+";end function"+";notify=function(str, type="+"!".quote+");return c10+box(type.color("+"white".quote+"),1)+wisp+box(str,1);end function"+";search=function(originalStr, string);if typeof(originalStr.indexOf(string)) != "+"number".quote+" then return false;return true;end function"+";"+";objects={"+"shell".quote+":{"+"list".quote+":[]}, "+"computer".quote+":{"+"list".quote+":[]}, "+"file".quote+":{"+"list".quote+":[]}, "+"null".quote+":{"+"list".quote+":[]}, "+"number".quote+":{"+"list".quote+":[]}, "+"rshell".quote+":{"+"list".quote+":[]}, "+"nfl".quote+":[]};osl=objects.shell.list;ocl=objects.computer.list;ofl=objects.file.list;orshl=objects.rshell.list"+";objects.parse=function(list, lan=0, loginAsUser=0, all=0)"+";	if list==[] then return false"+";	l=[]"+";	userl={"+"root".quote+":[], "+"guest".quote+":[], "+"unknown".quote+":[], "+"usr".quote+":[]}"+";  for i in list"+";    obj=i[0];username=i[1];lanip=i[2]"+";"+";"+";    if loginAsUser!=0 then"+";      if lan != 0 then"+";        if lan==lanip and search(username.lower, loginAsUser.lower) then userl["+"usr".quote+"].push(obj)"+";        continue"+";      end if"+";      if search(username.lower, loginAsUser.lower) then userl["+"usr".quote+"].push(obj)"+";      continue"+";    end if"+";    if lan != 0 then"+";      if username=="+"root".quote+" and lan==lanip then userl["+"root".quote+"].push(obj)"+";      if username=="+"unknown".quote+" and lan==lanip then userl["+"unknown".quote+"].push(obj)"+";      if username=="+"guest".quote+" and lan==lanip then userl["+"guest".quote+"].push(obj)"+";      if not userl.hasIndex(username) and lan==lanip then userl["+"usr".quote+"].push(obj)"+";      continue"+";    end if"+";    if username=="+"root".quote+" then userl["+"root".quote+"].push(obj)"+";    if username=="+"unknown".quote+" then userl["+"unknown".quote+"].push(obj)"+";    if username=="+"guest".quote+" then userl["+"guest".quote+"].push(obj)"+";    if not userl.hasIndex(username) then userl["+"usr".quote+"].push(obj)"+";  end for"+";"+";  if not loginAsUser and lan!=0 and all then return userl.root+userl.guest+userl.unknown+userl.usr"+";  if userl.root.len > 0 then return userl.root[0]"+";  if userl.usr.len > 0 then return userl.usr[0]"+";  if userl.unknown.len > 0 then;if all then return userl.unknown;return userl.unknown[0];end if"+";  if userl.guest.len > 0 then return userl.guest[0]"+";"+";  return false"+";end function"+";objects.navfile=function(obj, path=0, name=0, all=0, firstpass=1)"+";  if firstpass!=0 then ;while obj.path != "+"/".quote+";obj=obj.parent;end while;objects.nfl=[];firstpass=0;end if"+";  if tp(path) == "+"string".quote+" and path == "+"/".quote+" then return obj;result=false"+";  if tp(path) == "+"string".quote+" and path[0] != "+"/".quote+" then path="+"/".quote+"+path"+";  if tp(path) == "+"string".quote+" and path[-1] == "+"/".quote+" then path=path[:-1]"+";  if tp(name) == "+"string".quote+" then name=name.lower"+";  if tp(path) == "+"string".quote+" then path=path.lower"+";  for i in obj.get_folders+obj.get_files"+";    if not all and tp(result) == "+"file".quote+" then ;objects.nfl=[];return result;end if"+";    if all and [path,name] == [0,0] then objects.nfl.push([i, i.path, i.get_content, [i.is_folder,i.is_binary], i.name, i.size, i.permissions, i.owner, i.group])"+";    if (all and tp(name) == "+"string".quote+") and search(i.name.lower, name) then objects.nfl.push([i, i.path, i.get_content, [i.is_folder,i.is_binary], i.name, i.size, i.permissions, i.owner, i.group])"+";    if (tp(path)=="+"string".quote+" and [name,all]==[0,0]) and i.path.lower==path then ;result=i;objects.nfl=[];return result;end if"+";    if (tp(name)=="+"string".quote+" and [path,all]==[0,0]) and search(i.name.lower, name) then ;result=i;objects.nfl=[];return result;end if"+";    if ([path,name,all]==[0,0,0]) then obj.nfl.push([i, i.path, i.get_content, [i.is_folder,i.is_binary], i.name, i.size, i.permissions, i.owner, i.group])"+";    if i.is_folder then result=self.navfile(i, path, name, all, firstpass)"+";  end for"+";"+";  if ([path,name,all]==[0,0,0]) or all then return objects.nfl"+";  objects.nfl=[];return result"+";end function;objects.nf=@objects.navfile"+";objects.getUser=function(obj);result=false"+";  if tp(obj) == "+"shell".quote+" then obj=obj.host_computer"+";  if tp(obj) == "+"computer".quote+" then obj=obj.File("+"/".quote+")"+";"+";  if not tp(objects.nf(obj, "+"/root".quote+")) then file=[objects.nf(obj, "+"/boot/System.map".quote+"), objects.nf(obj, "+"/home".quote+")] else file=[objects.nf(obj, "+"/root".quote+"), objects.nf(obj, "+"/home".quote+")]"+";  if tp(file[0]) == "+"file".quote+" and file[0].has_permission("+"w".quote+") then return "+"root".quote+""+";  if tp(file[1]) == "+"file".quote+" then list=file[1].get_folders"+";  users=[];file_list=[];result=[]"+";  for f in list;if f.has_permission("+"w".quote+") then users.push(f.name);end for"+";"+";  if users.hasIndex(1) then return users[0]"+";  if tp(users.indexOf("+"guest".quote+")) == "+"number".quote+" then return "+"guest".quote+""+";  return "+"unknown".quote+""+";end function"+";objects.allocate=function(obj, lanip)"+";  if tp(["+"shell".quote+", "+"computer".quote+", "+"file".quote+"].indexOf(tp(obj))) == "+"number".quote+" then print b+(tp(obj).color("+"purple".quote+"))+c0"+";  if tp(obj) == "+"number".quote+" then ;if obj then ;objects.number.list.push([obj]);end if"+";  if tp(obj) == "+"shell".quote+" then ;objects.add(obj, lanip);objects.add(obj.host_computer, lanip);objects.add(obj.host_computer.File("+"/".quote+"), lanip);end if"+";  if tp(obj) == "+"computer".quote+" then ;objects.add(obj, lanip);objects.add(obj.File("+"/".quote+"), lanip);end if"+";  if tp(obj) == "+"file".quote+" then ;while obj.path!="+"/".quote+";obj=obj.parent;end while;objects.add(obj, lanip);end if"+";end function"+";objects.add=function(obj, lanip);objects[tp(obj)].list.push([obj, objects.getUser(obj), lanip, tp(obj)]);end function"+";objects.wipe=function();for i in objects.indexes;if tp(objects[i])!="+"map".quote+" then continue;objects[i].list=[];end for;end function"+";objects.has=function(list);if not list.len then return false;return true;end function"+";"+";get_mx=objects.nf(hc.File("+"/".quote+"), 0, "+"metaxploit.so".quote+")"+";mx=include_lib(get_mx.path)"+";"+";get_library=function(name)"+";  try=objects.nf(hc.File("+"/".quote+"), 0, name, 1)"+";  if not try.len then return false;result=false"+";  for i in try"+";    if i[0].name == name then"+";      get_obj=mx.load(i[0].path)"+";			"+";			if search(tp(get_obj), "+"Lib".quote+") then"+";				result=get_obj"+";				break"+";			end if"+";    end if"+";  end for"+";  return result"+";end function"+";"+";"+";temp=get_library(toolbox.lib)"+";if not temp or tp(temp) == "+"null".quote+" then return {"+"data".quote+":0,"+"callback".quote+":0, "+"msg".quote+":"+" trojan -b: library '".quote+"+toolbox.lib+"+"' not found...".quote+"}"+";toolbox.lib=temp"+";"+";get_payloads=function(lib, check=0, mem=0)"+";  db_map=toolbox.db"+";	ver=lib.version;name=lib.lib_name"+";	if not db_map.len then return false"+";  if (not db_map.hasIndex(name)) or (db_map.hasIndex(name) and not db_map[name].hasIndex(ver)) then return false"+";  if check then return true"+";  meml_owned=db_map[name][ver].indexes;payl=[]"+";  for memo in meml_owned;if not mem then ;payl=payl+db_map[name][ver][memo]; else ;if memo==mem then ;payl=db_map[name][ver][memo];break;end if;end if;end for"+";  return payl"+";end function"+";"+";"+";platter={"+"exploit".quote+":{}, "+"objects".quote+":0}"+";"+";execute=function(lib, lanip)"+";"+";	if get_payloads(lib, 1) and not toolbox.scan then"+";		print b+("+" found ".quote+"+lib.lib_name+"+" ".quote+"+lib.version).color("+"black purple purple".quote+")+c0"+";		memories=toolbox.db[lib.lib_name][lib.version].indexes"+";		print b+("+" stored addresses: ".quote+".color("+"black".quote+")+str(memories.len).color("+"purple".quote+"))+c10+c0"+";		for m in memories"+";			unsafe_vals=get_payloads(lib, 0, m)"+";			for p in unsafe_vals"+";				res=lib.overflow(m, p, lanip)"+";				if tp(res) == "+"null".quote+" then objects["+"null".quote+"].list.push([res, tp(res), m, p, lanip])"+";	      objects.allocate(res, lanip)"+";			end for"+";		end for"+";		return true"+";	end if"+";"+";	print b+("+"scanning: ".quote+".color("+"black".quote+"))+(lib.lib_name+"+" ".quote+"+lib.version+"+" ".quote+"+lanip).color("+"black purple purple".quote+")+c0"+";  memories=mx.scan(lib)"+";  for m in memories;unsafe_vals=[];output=mx.scan_address(lib, m);for line in output.split(c10);if tp(line.indexOf("+"</b>.".quote+")) == "+"number".quote+" then;unsafe_vals.push(slice(line, line.indexOf("+"<b>".quote+"), line.indexOf("+"</b>".quote+"))[3:]);end if;end for;"+";    platter.exploit[m]=unsafe_vals"+";    for p in unsafe_vals"+";      res=lib.overflow(m, p, lanip)"+";      if tp(res) == "+"null".quote+" then objects["+"null".quote+"].list.push([res, tp(res), m, p, lanip])"+";      objects.allocate(res, lanip)"+";    end for"+";  end for"+";"+";	return true"+";end function"+";execute(toolbox.lib, toolbox.lan)"+";"+";platter.objects=objects"+";obj.callback={"+"platter".quote+":platter}"+";return obj"+";"
+trojan.bounce="c0=char(0);"+"c10=char(10);"+"c33=char(33);"+"tp=@typeof;"+"cs=@clear_screen;"+"ui=@user_input;"+"gs=get_shell;"+"hc=gs.host_computer;"+"b="+"<b>".quote+";"+"u="+"<u>".quote+";"+"b2="+"</b>".quote+";"+"u2="+"</u>".quote+";"+"color={"+"map".quote+":{"+"b".quote+":"+"#707070".quote+", "+"p".quote+":"+"#7A53F6".quote+", "+"w".quote+":"+"#BEB9E7FF".quote+", "+"r".quote+":"+"red".quote+"}};"+"obj=get_custom_object;"+"toolbox=obj.data;"+"add_line=function();"+"print c0;"+"end function;"+"c=function(str);"+"  if tp(color.map.indexes.indexOf(str)) == "+"number".quote+" then return "+"<color=".quote+"+color.map[str]+"+">".quote+";"+"  if tp(str.indexOf("+"<color=".quote+")) == "+"number".quote+" then return str;"+"  return "+"<color=".quote+"+str+"+">".quote+";"+"end function;"+"string.color=function(string_split_by_space="+"black black black".quote+");"+"list=string_split_by_space.split("+" ".quote+");"+"  if not string_split_by_space.len then string_split_by_space="+"black black black".quote+";"+"  colorm={"+"black".quote+":"+"<#707070>".quote+", "+"white".quote+":"+"<#BEB9E7FF>".quote+", "+"purple".quote+":"+"<#7A53F6>".quote+", "+"pink".quote+":"+"<#ED2EEA>".quote+", "+"red".quote+":"+"<color=red>".quote+", "+"dark_red".quote+":"+"<#731313>".quote+", "+"blue".quote+":"+"<color=blue>".quote+", "+"green".quote+":"+"<#2BB930>".quote+", "+"dark_green".quote+":"+"<#2C6407>".quote+", "+"cyan".quote+":"+"<#32E3EF>".quote+", "+"yellow".quote+":"+"<#D2DE0F>".quote+", "+"brown".quote+":"+"<#674D06>".quote+", "+"orange".quote+":"+"<#EA9512>".quote+"};"+"  alpha="+"qwertyuiopasdfghjklzxcvbnm".quote+";"+"  number="+"1234567890".quote+";"+"  symbol="+"!@#$%^&*()_+-={}|[]\:'<>?,./".quote+";"+"  check_all=function();"+"    res=1;"+"    for i in list;"+"      if not colorm.hasIndex(i) then res=0 break;"+"    end for;"+"    return res;"+"  end function;"+"  if not check_all() then return false;"+"  while list.len < 3; list.push(list[-1]); end while"+";coa=colorm[list[0]];"+"con=colorm[list[1]];"+"cos=colorm[list[2]];"+"curr_color=coa;"+"curr_type="+"alpha".quote+";"+"newl=[];"+"fp=1;"+"  for char in self.values;"+"    is_a=(tp(alpha.indexOf(char.lower)) == "+"number".quote+");"+"is_n=(tp(number.indexOf(char)) == "+"number".quote+");"+"is_s=(tp(symbol.indexOf(char)) == "+"number".quote+");"+"    if char==c10 then ;"+"newl.push(char+curr_color);"+"continue;"+"end if;"+"    if is_a then curr_type="+"alpha".quote+";"+"if is_n then curr_type="+"number".quote+";"+"if is_s then curr_type="+"symbol".quote+";"+"    if curr_type=="+"alpha".quote+" then;"+"      if curr_color!=coa or (curr_color==coa and fp) then curr_color=coa else curr_color="+"".quote+";"+"fp=0;"+"      newl.push(curr_color+char);"+"curr_color=coa;"+"continue;"+"    end if;"+"    if curr_type=="+"number".quote+" then;"+"      if curr_color!=con or (curr_color==con and fp) then curr_color=con else curr_color="+"".quote+";"+"fp=0;"+"      newl.push(curr_color+char);"+"curr_color=con;"+"continue;"+"    end if;"+"    if curr_type=="+"symbol".quote+" then;"+"      if curr_color!=cos or (curr_color==cos and fp) then curr_color=cos else curr_color="+"".quote+";"+"fp=0;"+"      newl.push(curr_color+char);"+"curr_color=cos;"+"continue;"+"    end if;"+"    newl.push(char);"+"  end for;"+"  self=newl.join();"+"ctr=0;"+"  for i in self;"+"    if i == "+"<".quote+" then ctr=ctr+1;"+"  end for;"+"  for i in range(1,ctr);"+"    self=self+"+"</color>".quote+";"+"  end for;"+"  return self;"+"end function;"+";"+"reveal=function(str, onCondition=0, elseShow="+"".quote+");"+"if onCondition then return str;"+"return elseShow;"+"end function;"+"st="+"<s>".quote+";"+"est="+"</s>".quote+";"+"wisp=c("+"p".quote+")+"+"•".quote+"+c("+"w".quote+")+st+"+" ".quote+"+est+c("+"p".quote+")+"+"•".quote+";"+"box=function(str, opt=0, opt2=0);"+"return c("+"b".quote+")+b+"+"[".quote+"+reveal(u, (not opt), "+" ".quote+")+c("+"p".quote+")+str+c("+"b".quote+")+reveal(u2, (not opt), "+" ".quote+")+"+"]".quote+";"+"end function;"+"notify=function(str, type="+"!".quote+");"+"return c10+box(type.color("+"white".quote+"),1)+wisp+box(str,1);"+"end function;"+"search=function(originalStr, string);"+"if typeof(originalStr.indexOf(string)) != "+"number".quote+" then return false;"+"return true; end function;"+"objects={"+"shell".quote+":{"+"list".quote+":[]}, "+"computer".quote+":{"+"list".quote+":[]}, "+"file".quote+":{"+"list".quote+":[]}, "+"null".quote+":{"+"list".quote+":[]}, "+"number".quote+":{"+"list".quote+":[]}, "+"rshell".quote+":{"+"list".quote+":[]}, "+"nfl".quote+":[]};"+"osl=objects.shell.list;"+"ocl=objects.computer.list;"+"ofl=objects.file.list;"+"orshl=objects.rshell.list;"+"objects.parse=function(list, lan=0, loginAsUser=0, all=0);"+"if not list.len then return false;"+"user_dict={"+ "root".quote +":[]," + "guest".quote + ":[]," + "unknown".quote + ":[]," + "usr".quote + ":[]};"+" for object_arr in list;"+" if object_arr[2] != lan and lan then continue;"+"object = object_arr[0];"+"username = object_arr[1];"+"lanip = object_arr[2];"+"if loginAsUser then;"+"if search(username.lower, loginAsUser.lower) then user_dict[ " + "usr".quote + " ].push(object);"+"continue;"+"end if;"+"if username == "+"root".quote +" then user_dict["+"root".quote +"].push(object);"+"if username == "+"guest".quote +" then user_dict["+"guest".quote +"].push(object);"+"if username ==  "+"unknown".quote +" then user_dict["+"unknown".quote +"].push(object);"+"if not user_dict.hasIndex(username) then user_dict["+"usr".quote +"].push(object);"+"end for;"+"if not loginAsUser and lan and all then return user_dict.root + user_dict.guest + user_dict.unknown + user_dict.usr;"+"if user_dict.root.len > 0 then return user_dict.root[0];"+"if user_dict.usr.len > 0 then return user_dict.usr[0];"+"if user_dict.unknown.len > 0 then return user_dict.unknown[0];"+"if user_dict.guest.len > 0 then return user_dict.guest[0];"+"end function;"+"objects.navfile=function(obj, path=0, name=0, all=0, firstpass=1);"+"  if firstpass!=0 then ;"+"while obj.path != "+"/".quote+";"+"obj=obj.parent;"+"end while;"+"objects.nfl=[];"+"firstpass=0;"+"end if;"+"  if tp(path) == "+"string".quote+" and path == "+"/".quote+" then return obj;"+"result=false;"+"  if tp(path) == "+"string".quote+" and path[0] != "+"/".quote+" then path="+"/".quote+"+path;"+"  if tp(path) == "+"string".quote+" and path[-1] == "+"/".quote+" then path=path[:-1];"+"  if tp(name) == "+"string".quote+" then name=name.lower;"+"  if tp(path) == "+"string".quote+" then path=path.lower;"+"  for i in obj.get_folders+obj.get_files;"+"    if not all and tp(result) == "+"file".quote+" then ;"+"objects.nfl=[];"+"return result;"+"end if;"+"    if all and [path,name] == [0,0] then objects.nfl.push([i, i.path, i.get_content, [i.is_folder,i.is_binary], i.name, i.size, i.permissions, i.owner, i.group]);"+"    if (all and tp(name) == "+"string".quote+") and search(i.name.lower, name) then objects.nfl.push([i, i.path, i.get_content, [i.is_folder,i.is_binary], i.name, i.size, i.permissions, i.owner, i.group]);"+"    if (tp(path)=="+"string".quote+" and [name,all]==[0,0]) and i.path.lower==path then ;"+"result=i;"+"objects.nfl=[];"+"return result;"+"end if;"+"    if (tp(name)=="+"string".quote+" and [path,all]==[0,0]) and search(i.name.lower, name) then ;"+"result=i;"+"objects.nfl=[];"+"return result;"+"end if;"+"    if ([path,name,all]==[0,0,0]) then obj.nfl.push([i, i.path, i.get_content, [i.is_folder,i.is_binary], i.name, i.size, i.permissions, i.owner, i.group]);"+"    if i.is_folder then result=self.navfile(i, path, name, all, firstpass);"+"  end for;"+";"+"  if ([path,name,all]==[0,0,0]) or all then return objects.nfl;"+"  objects.nfl=[];"+"return result;"+"end function;"+"objects.nf=@objects.navfile;"+"objects.getUser=function(obj);result=false;"+"  if tp(obj) == "+"shell".quote+" then obj=obj.host_computer;"+"  if tp(obj) == "+"computer".quote+" then obj=obj.File("+"/".quote+");"+";"+"  if not tp(objects.nf(obj, "+"/root".quote+")) == "+"file".quote+" then file=[objects.nf(obj, "+"/boot/System.map".quote+"), objects.nf(obj, "+"/home".quote+")] else file=[objects.nf(obj, "+"/root".quote+"), objects.nf(obj, "+"/home".quote+")];"+"  if tp(file[0]) == "+"file".quote+" and file[0].has_permission("+"w".quote+") then return "+"root".quote+";"+"  if tp(file[1]) == "+"file".quote+" then file_list=file[1].get_folders;"+"  users=[];result=[];"+"  ;"+"  for f in file_list;if f.has_permission("+"w".quote+") then users.push(f.name);end for;"+";"+"  if users.hasIndex(1) then return users[0];"+"  if tp(users.indexOf("+"guest".quote+")) == "+"number".quote+" then return "+"guest".quote+";"+"  return "+"unknown".quote+";"+"end function;"+"objects.allocate=function(obj, lanip);"+"  if tp(["+"shell".quote+", "+"computer".quote+", "+"file".quote+"].indexOf(tp(obj))) == "+"number".quote+" then print b+(tp(obj).color("+"purple".quote+"))+c0;"+"  if tp(obj) == "+"number".quote+" then ;"+"if obj then ;"+"objects.number.list.push([obj]);"+"end if;"+"  if tp(obj) == "+"shell".quote+" then ;"+"objects.add(obj, lanip);"+"objects.add(obj.host_computer, lanip);"+"objects.add(obj.host_computer.File("+"/".quote+"), lanip);"+"end if;"+"  if tp(obj) == "+"computer".quote+" then ;"+"objects.add(obj, lanip);"+"objects.add(obj.File("+"/".quote+"), lanip);"+"end if;"+"  if tp(obj) == "+"file".quote+" then ;"+"while obj.path!="+"/".quote+";"+"obj=obj.parent;"+"end while;"+"objects.add(obj, lanip);"+"end if;"+"end function;"+"objects.add=function(obj, lanip);"+"objects[tp(obj)].list.push([obj, objects.getUser(obj), lanip, tp(obj)]);"+"end function;"+"objects.wipe=function();"+"for i in objects.indexes;"+"if tp(objects[i])!="+"map".quote+" then continue;"+"objects[i].list=[];"+"end for;"+"end function;"+"objects.has=function(list);"+"if not list.len then return false;"+"return true;"+"end function;"+"get_mx=objects.nf(hc.File("+"/".quote+"), 0, "+"metaxploit.so".quote+");"+"mx=include_lib(get_mx.path);"+";"+"get_library=function(name);"+"  try=objects.nf(hc.File("+"/".quote+"), 0, name, 1);"+"  if not try.len then return false;"+"result=false;"+"  for i in try;"+"    if i[0].name == name then;"+"      get_obj=mx.load(i[0].path);"+"			;"+"			if search(tp(get_obj), "+"Lib".quote+") then;"+"				result=get_obj;"+"				break;"+"			end if;"+"    end if;"+"  end for;"+"  return result;"+"end function;"+"temp=get_library(toolbox.lib);"+"if not temp or tp(temp) == "+"null".quote+" then return {"+"data".quote+":0,"+"callback".quote+":0, "+"msg".quote+":"+" trojan -b: library '".quote+"+toolbox.lib+"+"' not found...".quote+"};"+"toolbox.lib=temp;"+";"+"get_payloads=function(lib, check=0, mem=0);"+"  db_map=toolbox.db;"+"	ver=lib.version;"+"name=lib.lib_name;"+"	if not db_map.len then return false;"+"  if (not db_map.hasIndex(name)) or (db_map.hasIndex(name) and not db_map[name].hasIndex(ver)) then return false;"+"  if check then return true;"+"  meml_owned=db_map[name][ver].indexes;"+"payl=[];"+"  for memo in meml_owned;"+"if not mem then ;"+"payl=payl+db_map[name][ver][memo];"+" else ;"+"if memo==mem then ;"+"payl=db_map[name][ver][memo];"+"break;"+"end if;"+"end if;"+"end for;"+"  return payl;"+"end function;"+"platter={"+"exploit".quote+":{}, "+"objects".quote+":0};"+";"+"execute=function(lib, lanip);"+";"+"	if get_payloads(lib, 1) and not toolbox.scan then;"+"		print b+("+" found ".quote+"+lib.lib_name+"+" ".quote+"+lib.version).color("+"black purple purple".quote+")+c0;"+"		memories=toolbox.db[lib.lib_name][lib.version].indexes;"+"		print b+("+" stored addresses: ".quote+".color("+"black".quote+")+str(memories.len).color("+"purple".quote+"))+c10+c0;"+"		for m in memories;"+"			unsafe_vals=get_payloads(lib, 0, m);"+"			for p in unsafe_vals;"+"				res=lib.overflow(m, p, lanip);"+"				if tp(res) == "+"null".quote+" then objects["+"null".quote+"].list.push([res, tp(res), m, p, lanip]);"+"	      objects.allocate(res, lanip);"+"			end for;"+"		end for;"+"		return true;"+"	end if;"+";"+"	print b+("+"scanning: ".quote+".color("+"black".quote+"))+(lib.lib_name+"+" ".quote+"+lib.version+"+" ".quote+"+lanip).color("+"black purple purple".quote+")+c0;"+"  memories=mx.scan(lib);"+"  for m in memories;"+"unsafe_vals=[];"+"output=mx.scan_address(lib, m);"+"for line in output.split(c10);"+"if tp(line.indexOf("+"</b>.".quote+")) == "+"number".quote+" then;"+"unsafe_vals.push(slice(line, line.indexOf("+"<b>".quote+"), line.indexOf("+"</b>".quote+"))[3:]);"+"end if;"+"end for;"+";"+"    platter.exploit[m]=unsafe_vals;"+"    for p in unsafe_vals;"+"      res=lib.overflow(m, p, lanip);"+"      if tp(res) == "+"null".quote+" then objects["+"null".quote+"].list.push([res, tp(res), m, p, lanip]);"+"      objects.allocate(res, lanip);"+"    end for;"+"  end for;"+"	return true;"+"end function;"+"execute(toolbox.lib, toolbox.lan);"+"platter.objects=objects;"+"obj.callback={"+"platter".quote+":platter};"+"return obj;"
 trojan.dict="obj=get_custom_object()"+";if params.hasIndex(1) then"+";  shell=get_shell(params[0], params[1])"+";  if typeof(shell) == "+"shell".quote+" then obj.callback=params[1]"+";else"+";  pl=obj.dict"+";  user=params[0]"+";  for i in pl"+";    shell=get_shell(user, i)"+";    if typeof(shell) == "+"shell".quote+" then ;obj.callback=i;break; end if"+";  end for"+";end if"+";return obj"+";"
 trojan.escalate="obj=get_custom_object()"+";if params.hasIndex(1) then"+";  shell=get_shell(params[0], params[1])"+";  if typeof(shell) == "+"shell".quote+" then obj.callback=shell"+";else"+";  pl=obj.dict"+";  user=params[0]"+";  for i in pl"+";    shell=get_shell(user, i)"+";    if typeof(shell) == "+"shell".quote+" then ;obj.callback=shell;break; end if"+";  end for"+";end if"+";return obj"+";"
 
@@ -50,31 +50,21 @@ objects.parse=function(list, lan=0, loginAsUser=0, all=0)//(objects.file.list, l
 	user_dict={"root":[], "guest":[], "unknown":[], "usr":[]}
   
   for object_arr in list
+    if object_arr[2] != lan and lan then continue
+   
     object = object_arr[0]
     username = object_arr[1]
     lanip = object_arr[2]
 
     if loginAsUser then
-      if lan then
-        if lan == lanip and search(username.lower, loginAsUser.lower) then user_dict["usr"].push(object)
-        continue
-      end if
       if search(username.lower, loginAsUser.lower) then user_dict["usr"].push(object)
-      continue
-    end if
-
-    if lan and lan == lanip then
-      if username == "root" then user_dict["root"].push(object)
-      if username == "guest" then user_dict["guest"].push(object)
-      if username == "unknown" then user_dict["unknown"].push(object)
-      if not user_dict.hasIndex(username) then user_dict["usr"].push(object)
       continue
     end if
 
     if username == "root" then user_dict["root"].push(object)
     if username == "guest" then user_dict["guest"].push(object)
     if username == "unknown" then user_dict["unknown"].push(object)
-    if not user_dict.hasIndex(username) then user_dict["usr"].push(object)
+    if not tp(user_dict.usr.indexOf(isername)) == "number" then user_dict["usr"].push(object)
   end for
 
   if not loginAsUser and lan and all then return user_dict.root + user_dict.guest + user_dict.unknown + user_dict.usr
@@ -109,16 +99,18 @@ objects.get_user=function(obj);result=false
   if tp(obj) == "shell" then obj=obj.host_computer
   if tp(obj) == "computer" then obj=obj.File("/")
 
-  if not tp(objects.nf(obj, "/root")) then file=[objects.nf(obj, "/boot/System.map"), objects.nf(obj, "/home")] else file=[objects.nf(obj, "/root"), objects.nf(obj, "/home")]
+  if not tp(objects.nf(obj, "/root")) == "file" then file=[objects.nf(obj, "/boot/System.map"), objects.nf(obj, "/home")] else file=[objects.nf(obj, "/root"), objects.nf(obj, "/home")]
   if tp(file[0]) == "file" and file[0].has_permission("w") then return "root"
-  if tp(file[1]) == "file" then list=file[1].get_folders
-  users=[];file_list=[];result=[]
-  for f in list;if f.has_permission("w") then users.push(f.name);end for
+  if tp(file[1]) == "file" then file_list=file[1].get_folders
+  users=[];result=[]
+  
+  for f in file_list;if f.has_permission("w") then users.push(f.name);end for
 
   if users.hasIndex(1) then return users[0]
   if tp(users.indexOf("guest")) == "number" then return "guest"
   return "unknown"
 end function
+
 objects.allocate=function(obj, lanip)
   if tp(["shell", "computer", "file"].indexOf(tp(obj))) == "number" then print b+(tp(obj).color("purple"))
   if tp(obj) == "number" then ;if obj then print b+("password: ".color("black")+misc.CPT.color("purple"));self.number.list.push([obj]);end if
@@ -185,6 +177,7 @@ end function
 device={"tree":{}, "current":{}, "user_list":{}, "display_tree":""}
 device.add=function(lanIP)
   map={};map.lan=lanIP
+  
   f=objects.parse(objects.file.list, map.lan)
   map.shell_list=objects.parse(objects.shell.list, map.lan, 0, 1)
   map.comp_list=objects.parse(objects.computer.list, map.lan, 0, 1)
@@ -194,7 +187,6 @@ device.add=function(lanIP)
     map.libf=objects.nf(f, "/lib");map.sysf=objects.nf(f, "/sys");map.bootf=objects.nf(f, "/boot");map.vitals=[map.sysf, map.bootf, map.libf]
     map.rootf=objects.nf(f, 0, "root", 1);map.passf=objects.nf(f, 0, "passwd", 1);map.logf=objects.nf(f, 0, "system.log", 1);map.configf=objects.nf(f, 0, "Config", 1)[:-1];map.trashf=objects.nf(f, 0, ".Trash", 1);map.sourcesf=objects.nf(f, 0, "sources.txt", 1)
     map.all=[map.mainf, map.homef, map.varf,  map.etcf, map.vitals, map.rootf, map.passf, map.logf, map.configf, map.trashf]
-
   end if
   if map.len == 1 then ;for i in ["mainf", "homef", "varf", "etcf", "vitals", "rootf", "passf", "logf", "configf", "trashf"];if tp(i.indexOf("f")) == "number" then;map[i]=0;continue;end if;map[i]=[0,0,0];end for;end if
   map.profile=function()
@@ -211,7 +203,6 @@ device.get_vuln_dir = function(inputFile = 0)
   if not inputFile then inputFile = objects.borrow("file", user.current.name)
  
   for file in inputFile.get_folders
-
     if file.has_permission("w") and file.has_permission("x") then return file
      
     result = device.get_vuln_dir(file)
@@ -273,9 +264,9 @@ user.add_obj=function(name, lanip, obj)
   usr.f=obj
   return true
 end function
-user.wipe=function();user={"tree":{}, "current":{"name":""}};end function
+user.wipe=function();user.tree = {};user.current = {"name":""};end function
 
-device.display_tree=function(show=0, add=0)
+device.display = function(show=0, add=0)
   get_objects=function(input_list)//[shell=0?, file=0?, comp=0?]
     res="   ".color("black")
     for i in input_list
@@ -361,6 +352,7 @@ DB.extract_map=function(nameSpace)
   for file in database;if file.name.lower.search("readme") then continue;m=m+JSON.read(file.get_content);end for
   return m
 end function
+
 DB.extract_list=function(nameSpace)
   database=DB.choose(DB.gp(nameSpace))
   if tp(database) != "file" then return null
@@ -373,6 +365,7 @@ DB.extract_list=function(nameSpace)
   //for file in database;if file.name.lower.search("readme") then continue;for i in file.get_content.split(" "); l.push(i);end for;end for
   return l
 end function
+
 DB.glue_map=function(keyl, valuel);map={};if keyl.len != valuel.len then return false;for i in range(0, keyl.len-1);map[keyl[i]]=valuel[i];end for;return map;end function
 DB.split_map=function(map, max_size=10000)
   temp=map
@@ -433,6 +426,13 @@ DB.addTo=function(dataset, nameSpace)//database as in DB.choose(DB.get_path(name
   return true
 end function
 
+DB.reset=function(nameSpace)
+	database=DB.choose(DB.gp(nameSpace))
+	if not database then return false else database=database.get_files
+  for file in database;if file.name.lower.search("readme") then continue;file.delete;end for
+	return true
+end function
+
 DB.set=function(dataset, nameSpace)
   database=DB.choose(DB.gp(nameSpace))
   if tp(database) != "file" then return null
@@ -457,12 +457,6 @@ DB.has=function(entry, nameSpace)
   return false
 end function
 
-DB.reset=function(nameSpace)
-	database=DB.choose(DB.gp(nameSpace))
-	if not database then return false else database=database.get_files
-  for file in database;if file.name.lower.search("readme") then continue;file.delete;end for
-	return true
-end function
 
 misc.macro_db_map=function();newm={}
   for i in DB.extract_map("macro")
@@ -628,10 +622,12 @@ add_exploit=function(entry_map, lib, verbose=1)
   return true
 end function
 
-execute=function(net, third, lanip, scan=0, changePasswords=0);memories=""
+execute=function(net, third, lanip = 0, scan=0, changePasswords=0);memories=""
   lib=net.dump_lib
   if tp(ip.lanList.indexOf(lanip)) != "number" then ip.lanList.push(lanip)
   if tp(mx.rshell_server) != "list" then orshl=[] else orshl=mx.rshell_server
+
+  if lanip then third = lanip;
 
   if orshl.len > 0 then ;for obj in orshl;objects.add(obj, obj.host_computer.lan_ip);end for;end if
   if not scan and get_payloads(lib, 1) then scan=0 else scan=1
@@ -644,6 +640,7 @@ execute=function(net, third, lanip, scan=0, changePasswords=0);memories=""
     for m in memories
       unsafe_vals=get_payloads(lib, 0, m)
       for p in unsafe_vals
+      print third
         if changePasswords then obj=lib.overflow(m, p, third) else obj=lib.overflow(m, p)
         if tp(obj) == "null" then objects["null"].list.push([obj, tp(obj), m, p, lanip])
         objects.allocate(obj, lanip)
@@ -667,21 +664,30 @@ execute=function(net, third, lanip, scan=0, changePasswords=0);memories=""
   end for
   print notify("recon for "+("'"+hide_ip(ip.pub)+"'").color("black black white")+" @ "+("'"+hide_ip(lanip)+"'").color("black black white")+" completed.")+c0
   add_exploit(db_entrym, lib)
+  collect()
   return true
 end function
 
-collect=function(add=0)
+
+collect=function()
+  //print "LAN LIST: "+ ip.lanList
   for lan in ip.lanList
-    device.add(lan)
+    if not device.get(lan) then device.add(lan)
     if not user.tree.hasIndex(lan) then user.tree[lan]={}
     if not device.user_list.hasIndex(lan) then device.user_list[lan]=[]
-    for obj in objects.file.list+objects.shell.list+objects.computer.list;if lan != obj[2] then continue;name=obj[1];if not user.tree[lan].hasIndex(name) then ;user.add(lan, name);device.user_list[lan].push(name);end if
-    //announce("name", name+" "+lan)
-    //announce("object", tp(obj[0]))
-    if tp(obj[0]) == "shell" then user.tree[lan][name].s=obj[0]
-    if tp(obj[0]) == "computer" then user.tree[lan][name].c=obj[0]
-    if tp(obj[0]) == "file" then user.tree[lan][name].f=obj[0]
-    ;end for
+    for obj in objects.file.list+objects.shell.list+objects.computer.list
+      if lan != obj[2] then continue
+      name=obj[1]
+      if not user.tree[lan].hasIndex(name) then 
+        user.add(lan, name)
+        device.user_list[lan].push(name)
+      end if
+      // announce("matchup", obj[2]+" "+lan)
+      // announce("object", tp(obj))
+      if tp(obj[0]) == "shell" then user.tree[lan][name].s=obj[0]
+      if tp(obj[0]) == "computer" then user.tree[lan][name].c=obj[0]
+      if tp(obj[0]) == "file" then user.tree[lan][name].f=obj[0]
+    end for
   end for
 end function
 
@@ -692,29 +698,29 @@ trojan.build=function(src_name, code, obj_list, params=0, run=1, delete=1)
   file = objects.borrow("file")
   tf = device.get_vuln_dir()
   if not tf then return {"status":0, "data":"no vulnerable directories found..."}
+  
   tfp = reveal("", (tf.path=="/") , tf.path)
   src_name = "." + src_name
   src_path = tfp + "/"+src_name
   bin_name = src_name[:-4] //removes '.src'
 
   try = comp.touch(reveal("/", (tfp=="") , tfp), src_name)
-  ref = comp.File(src_path)
-  
   if not try then return {"status": 0, "data": "could not create src file, permission denied..."}
+  ref = comp.File(src_path)
+  if not ref then return {"status": 0, "data": "src file created but not found..."}
+  ref.set_content(code.split(";").join(char(10)))
   
-  if not ref then return {"status":0, "data":"permission denied..."}
-  
-  ref.set_content(code)
   store=shell.build(ref.path, reveal("/", (tfp==""), tfp))
+  
   if tp(store) == "string" and store.len > 0 then ;return {"status":0, "data":store};end if
   ref2=comp.File(tfp+"/"+bin_name)
   //print b+("writing source code...".color("black"))+c0
   //print b+("compiling binary...".color("black"))+c0
   add_line
   if run then
-    printb(("running" + (bin_name).c("purple") + "...").color("black"))
+    printb(("running " + (bin_name).c("purple") + "...").color("black"))
     if not params then try=shell.launch(tfp+"/"+bin_name) else try=shell.launch(tfp+"/"+bin_name, params)
-    if tp(try) == "string" then ;return {"status":0, "data":try}
+    if tp(try) == "string" then return {"status":0, "data":try}
   end if
   if delete then
     ref.delete

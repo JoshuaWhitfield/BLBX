@@ -23,7 +23,7 @@ op={"pipeMode":0, "addMode":0, "grabMode":0}
 inputClean=function(list)
 l=[]
 for i in list
-if i == " " or i == "" then continue
+if i == 	" " or i == "" then continue
 l.push(i)
 end for
 return l
@@ -116,7 +116,7 @@ pocket.clear=function()
 pocket.map={}
 end function
 
-if not pocket.summary.len then csr="$" else csr=pocket.summary.join(" ")
+if not pocket.summary.len then csr="$" else csr=pocket.summary.join(	" ")
 command.prompt=next+box("blbx")+wisp+box(nav.get())+wisp+box(csr)+wisp+box(reveal((user.current.name.color("black"))+("@".color("purple"))+(hide_ip(ip.lan).color("black")), (user.current.name!=""), "@"))+next+wisp+box("#")+u2+c("p")+"> "+b+c("b")
 
 // command1 ^push to pocket
@@ -130,9 +130,9 @@ segment=function(input_str, input_map)
   error_catch=[]
   cout=0
   for link in chain
-    if ["+", ">", "^"].has(link[-1]) then link=link+" "// this makes sure that the operators are found inside links even when the operator is at the end.
+    if [, ">", "^"].has(link[-1]) then link=link+	" "// this makes sure that the operators are found inside links even when the operator is at the end.
 
-    if pocket.summary.len > 0 then csr=pocket.summary.join(" ") else csr="$"
+    if pocket.summary.len > 0 then csr=pocket.summary.join(	" ") else csr="$"
     command.prompt=next+box("blbx")+wisp+box(nav.get())+wisp+box(csr)+wisp+box(reveal((user.current.name.color("black"))+("@".color("purple"))+(hide_ip(ip.lan).color("black")), (user.current.name!=""), "@"))+next+wisp+box("#")+u2+c("p")+"> "+b+c("b")
 
     //debug -- announce("link", link)
@@ -144,13 +144,13 @@ segment=function(input_str, input_map)
     end if
 
     if link.search(" ^") then
-      command1=operation[0].split(" ")[0]
+      command1=operation[0].split(	" ")[0]
       if not input_map.hasIndex(command1) then 
       print cnf(command1)
       break
       end if
-      if not run_type_single then show_prompt(input_map, operation[0].split(" "))
-      try=input_map.safe_run(command1, operation[0].split(" "))
+      if not run_type_single then show_prompt(input_map, operation[0].split(	" "))
+      try=input_map.safe_run(command1, operation[0].split(	" "))
       if tp(try) != "map" then continue
       if tp(try) == "map" and try.status then pocket.add(try.data, command1)
       if tp(try) == "map" and not try.status then 
@@ -162,11 +162,11 @@ segment=function(input_str, input_map)
 
     if link.search(" >+") then
       //since this operator is capable of iteration, put a list in the pocket of the second command that results will be pushed to
-      command1=operation[0].split(" ")[0]
-      command2=operation[1].split(" ")[0]
-      args=operation[1].split(" ")[1:]
+      command1=operation[0].split(	" ")[0]
+      command2=operation[1].split(	" ")[0]
+      args=operation[1].split(	" ")[1:]
       if command2 == "" then 
-      error_catch.push("pipe '"+">+".color("white")+"': must specify a second command...")
+      error_catch.push("pipe '"">+".color("white")+"': must specify a second command...")
       break
       end if
 
@@ -190,13 +190,13 @@ segment=function(input_str, input_map)
         if break_toggle then break
         if tp(item) == "list" then
           for i in item
-            show_prompt(input_map, (command2+" "+item+reveal(" "+args.join(" "), (args.len > 0))).split(" "))
+            show_prompt(input_map, (command2+	" "+item+reveal(	" "+args.join(	" "), (args.len > 0))).split(	" "))
             if command2 == "" then 
-            error_catch.push("pipe '"+">".color("white")+"': must specify a second command...")
+            error_catch.push("pipe '"">".color("white")+"': must specify a second command...")
             break_toggle=1
             break
             end if
-            try=input_map.safe_run(command2, (command2+" "+reveal(args.join(" "), (args.len > 0))+" "+i).split(" "))
+            try=input_map.safe_run(command2, (command2+	" "+reveal(args.join(	" "), (args.len > 0))+	" "+i).split(	" "))
             //try=input_map.safe_run(command2, [command2]+args+[i])
 
             if tp(try) != "map" then continue
@@ -214,13 +214,13 @@ segment=function(input_str, input_map)
         print cnf(command2)
         break
         end if
-        show_prompt(input_map, (command2+" "+item+reveal(" "+args.join(" "), (args.len > 0))).split(" "))
+        show_prompt(input_map, (command2+	" "+item+reveal(	" "+args.join(	" "), (args.len > 0))).split(	" "))
         if command2 == "" then 
-        error_catch.push("pipe '"+">".color("white")+"': must specify a second command...")
+        error_catch.push("pipe '"">".color("white")+"': must specify a second command...")
         break
         end if
 
-        try=input_map.safe_run(command2, (command2+" "+item+reveal(" "+args.join(" "), (args.len > 0))).split(" "))
+        try=input_map.safe_run(command2, (command2+	" "+item+reveal(	" "+args.join(	" "), (args.len > 0))).split(	" "))
 
         if tp(try) != "map" then continue
         if tp(try) == "map" and try.status then second_pocket.push(try.data)
@@ -234,9 +234,9 @@ segment=function(input_str, input_map)
     end if
 
     if link.search(" >") then
-      command1=operation[0].split(" ")[0]
-      command2=operation[1].split(" ")[0]
-      args=operation[1].split(" ")[1:]
+      command1=operation[0].split(	" ")[0]
+      command2=operation[1].split(	" ")[0]
+      args=operation[1].split(	" ")[1:]
 
       if not input_map.hasIndex(command1) then 
       print cnf(command1)
@@ -257,13 +257,13 @@ segment=function(input_str, input_map)
         if tp(item) == "list" then
           // debug -- announce("item", item)
           for i in item
-            show_prompt(input_map, (command2+" "+i+reveal(" "+args.join(" "), (args.len > 0))).split(" "))
+            show_prompt(input_map, (command2+	" "+i+reveal(	" "+args.join(	" "), (args.len > 0))).split(	" "))
             if command2 == "" then 
-            error_catch.push("pipe '"+">".color("white")+"': must specify a second command...")
+            error_catch.push("pipe '"">".color("white")+"': must specify a second command...")
             break_toggle=1
             break
             end if
-            try=input_map.safe_run(command2, (command2+" "+i+reveal(" "+args.join(" "), (args.len > 0))).split(" "))
+            try=input_map.safe_run(command2, (command2+	" "+i+reveal(	" "+args.join(	" "), (args.len > 0))).split(	" "))
 
             if tp(try) != "map" then continue
             if tp(try) == "map" and not try.status then 
@@ -279,13 +279,13 @@ segment=function(input_str, input_map)
         print cnf(command2)
         break
         end if
-        show_prompt(input_map, (command2+" "+item+reveal(" "+args.join(" "), (args.len > 0))).split(" "))
+        show_prompt(input_map, (command2+	" "+item+reveal(	" "+args.join(	" "), (args.len > 0))).split(	" "))
         if command2 == "" then 
-        error_catch.push("pipe '"+">".color("white")+"': must specify a second command...")
+        error_catch.push("pipe '"">".color("white")+"': must specify a second command...")
         break_toggle=1
         break
         end if
-        try=input_map.safe_run(command2, (command2+" "+item+reveal(" "+args.join(" "), (args.len > 0))).split(" "))
+        try=input_map.safe_run(command2, (command2+	" "+item+reveal(	" "+args.join(	" "), (args.len > 0))).split(	" "))
 
         if tp(try) != "map" then continue
         if tp(try) == "map" and not try.status then 
@@ -296,27 +296,27 @@ segment=function(input_str, input_map)
       continue
     end if
 
-    if link.split(" ")[0].search("@") then
+    if link.split(	" ")[0].search("@") then
       //links containing macros cannot use pipe operators
-      macro_name=link.split(" ")[0][1:]
+      macro_name=link.split(	" ")[0][1:]
       if not misc.macro_db_map.hasIndex(macro_name) then 
       print mnf(macro_name)+c0
       continue
       end if
-      if pocket.summary.len > 0 then csr=pocket.summary.join(" ") else csr="$"
+      if pocket.summary.len > 0 then csr=pocket.summary.join(	" ") else csr="$"
       input_map.prompt=next+box("blbx")+wisp+box(nav.get())+wisp+box(csr)+wisp+box(reveal((user.current.name.color("black"))+("@".color("purple"))+(hide_ip(ip.lan).color("black")), (user.current.name!=""), "@"))+next+wisp+box("#")+u2+c("p")+"> "+b+c("b")
       segment(misc.macro_db_map[macro_name].values.join(" : "), input_map)
       continue
     end if
 
     cout=cout+1
-    command1=link.split(" ")[0]
+    command1=link.split(	" ")[0]
     if not input_map.hasIndex(command1) then 
     print cnf(command1)
     break
     end if
-    if not run_type_single then show_prompt(input_map, link.split(" "))
-    try=input_map.safe_run(command1, link.split(" "))
+    if not run_type_single then show_prompt(input_map, link.split(	" "))
+    try=input_map.safe_run(command1, link.split(	" "))
 
     if tp(try) != "map" then continue
     if tp(try) == "map" and not try.status then 
@@ -385,8 +385,8 @@ l=[tp(mx),tp(co)]
 
 if tp(l.indexOf("null")) == "number" then
   add_line
-  printb(a()+("  "+"metaxploit.so".c("white")+" and "+"crypto.so".c("white")+" are missing...").c("black"))
-  printb(a()+("  "+"It's okay!".c("green")+" to install them, run the following: ").c("black"))
+  printb(a()+"  ""metaxploit.so".c("white")+" and ""crypto.so".c("white")+" are missing...".c("black"))
+  printb(a()+"  ""It's okay!".c("green")+" to install them, run the following: ".c("black"))
   printb(a()+"' --sw 1 80,1542 ' ... copy IP address".c("black purple"))
   printb(a()+"' apt -ar ip_address 1542 : update '".c("black purple"))
 end if
@@ -435,23 +435,23 @@ add_line
 //------------------------
 
 while command.process
-  if pocket.summary.len > 0 then csr=pocket.summary.join(" ") else csr="$" //box(reveal((user.current.name.color("black"))+("@".color("purple"))+(hide_ip(ip.lan).color("black")), (user.current.name!=""), "@"))
+  if pocket.summary.len > 0 then csr=pocket.summary.join(	" ") else csr="$" //box(reveal((user.current.name.color("black"))+("@".color("purple"))+(hide_ip(ip.lan).color("black")), (user.current.name!=""), "@"))
   command.prompt=box("blbx")+wisp+box(nav.get)+wisp+box(csr)+ reveal(wisp+box(user.current.name.color("black")+"@".color("purple")+hide_ip(ip.lan).color("black")), (ip.lan!="127.0.0.1"), "") +next+wisp+box("#")+u2+c("p")+"> "+b+c("b")
   //print params.len
   if command.is_auto then command.is_auto=0
   if not params.len then 
-  cmd=inputClean(ui(command.prompt).split(" "))
+  cmd=inputClean(ui(command.prompt).split(	" "))
   add_line
    else
   cmd=params
   command.is_auto=1
-  if params.join(" ").split(" : ").len == 1 then show_prompt(command, cmd)
+  if params.join(	" ").split(" : ").len == 1 then show_prompt(command, cmd)
   params=[]
    end if
 
   if not cmd.len then continue
 
-  segment(cmd.join(" "), command)
+  segment(cmd.join(	" "), command)
   continue
 end while
 
