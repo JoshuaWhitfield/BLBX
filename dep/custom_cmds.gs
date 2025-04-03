@@ -257,9 +257,10 @@ command.show = function(cmd)
     network_piece="network: ".color("black")+user.current.pub.color("purple")
   end if
   printb(network_piece)
-
-  device.display_tree(1, 1)
-
+  
+  device.display(1, 1)
+  collect
+  
   return true
 end function
 command["--sh"]=@command.show
@@ -511,7 +512,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
     if not cmd.hasIndex(2) then ;usage({"usage":[" trojan -bounce lanIP libName"]});return handle.return_package; end if
     if not cmd.hasIndex(3) then cmd.push("init")
     lib_found=0
-    for i in ["init.so", "net.so", "aptclient.so", "kernel_module.so", "kernel_router.so", "crypto.so", "metaxploit.so", "libhttp.so", "libsmtp.so", "libssh.so", "libftp.so", "librepository.so"]
+    for i in ["init.so", "net.so", "aptclient.so", "kernel_module.sso", "kernel_router.so", "crypto.so", "metaxploit.so", "libhttp.so", "libsmtp.so", "libssh.so", "libftp.so", "librepository.so"]
       if typeof(i.lower.indexOf(cmd[3])) == "number" then 
         lib_found = i
         break
@@ -548,7 +549,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
       if not temp.q then
         add_line
         printb(("target library '"+lib_found+"' not found...").color("black"))
-        printb("planting library...".color("black"))
+        printb("planting library".color("purple") + "...".color("black"))
       end if
       local_lib=objects.nf(hc.File("/"), 0, lib_found)
       if tp(local_lib) != "file" then
@@ -577,7 +578,7 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
     print store
     if not store.status then ;return store;end if
 
-    if delete_mx then fmx.delete
+    fmx.delete
     if local_lib != 0 then local_lib.delete
 
     obj=get_custom_object()
@@ -589,11 +590,20 @@ command.trojan=function(cmd);error_catch=[];head=" "+cmd[0];temp={"q":0}
     objects.number.list=objects.number.list+obj.callback.platter.objects.number.list
     collect()
     combine=obj.callback.platter.objects.shell.list+obj.callback.platter.objects.computer.list+obj.callback.platter.objects.file.list+obj.callback.platter.objects.number.list
+    
+    print "loading vulnerable objects"
+    for object_arr in combine 
+      object = object_arr[0]
+      print "allocating"
+      objects.allocate(object)
+    end for
+
     if not temp.q then
       print notify(("'".color("white")+ip.lan.color("black")+"'".color("white"))+" --> "+("'".color("white")+obj.data.lan.color("black")+"'".color("white")))+c0
       print notify("bounce exploit collected "+("'"+combine.len+"'").color("black black white")+" objects", reveal("?", (not combine.len), "!"))+c0
-      command.safe_run("show", ["show"])
     end if
+    command.safe_run("connect", ["connect", ip.lan])
+    command.safe_run("show", ["show"])
   end function
   handle["-b"]=@handle.bounce
   handle["-bounce"]=@handle.bounce
@@ -1081,7 +1091,7 @@ command.users=function(cmd);error_catch=[];head=" "+cmd[0]
   end function
   if not init then return {"status":0, "data":error_catch}
   collect()
-  print device.display_tree+c10
+  print device.display+c10
 end function
 command["--u"]=@command.users
 
@@ -1203,7 +1213,7 @@ command.farm=function(cmd);error_catch=[];head=" "+cmd[0]
     count=count-1
     wait(5)
   end while
-  cs
+  
   show_prompt(command, cmd)
   printb(("        results:".color("purple black black")))
   print bar(25)

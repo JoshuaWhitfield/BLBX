@@ -350,11 +350,23 @@ if not tp(hc.File(i)) == "file" then hc.touch(i.split("/")[:-1].join("/"), i.spl
 end for
 if tp(hc.File("/root/blackbox/json/config.json")) == "file" then
   if not hc.File("/root/blackbox/json/config.json").get_content.len then 
+
   hc.File("/root/blackbox/json").delete
   gs.launch(current_path)
   end if
 
   map=JSON.read(hc.File("/root/blackbox/json/config.json").get_content.dec)
+  color.map.p=map.main_color //this was previously commented before debugging. might be the cause of future bugs.
+  misc.changePasswdTo=map.number_exploit_new_password
+  status.streamer_mode=map.streamer_mode
+  status.hide_db_files=map.hide_db_files
+else 
+  config_object = {"main_color": "#7A53F6", "number_exploit_new_password": "1234", "streamer_mode": 0, "hide_db_files": 1}
+  hc.touch("/root/blackbox/json", "config.json")
+  config_file = hc.File("/root/blackbox/json/config.json")
+  config_file.set_content(JSON.write(config_object))
+  
+  map=JSON.read(config_file.get_content.dec)
   color.map.p=map.main_color //this was previously commented before debugging. might be the cause of future bugs.
   misc.changePasswdTo=map.number_exploit_new_password
   status.streamer_mode=map.streamer_mode
@@ -444,7 +456,7 @@ while command.process
   add_line
    else
   cmd=params
-  command.is_auto=1
+  command.is_aut=1
   if params.join(" ").split(" : ").len == 1 then show_prompt(command, cmd)
   params=[]
    end if
